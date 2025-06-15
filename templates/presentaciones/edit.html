@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card shadow">
+  <div class="card-header bg-primary text-white">
+    <h2 class="mb-0">Editar Presentación: {{ presentacion.presentacion }}</h2>
+  </div>
+  
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('presentacion.edit', id=presentacion.id) }}">
+      <div class="mb-3">
+        <label class="form-label">Nombre de la Presentación</label>
+        <input type="text" class="form-control" name="presentacion" 
+               value="{{ presentacion.presentacion }}" required>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-control" name="descripcion" rows="3">{{ presentacion.descripcion or '' }}</textarea>
+      </div>
+      
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" name="estado" id="estado"
+               {% if presentacion.estado %}checked{% endif %}>
+        <label class="form-check-label" for="estado">Activo</label>
+      </div>
+      
+      <div class="d-flex justify-content-end">
+        <a href="{{ url_for('presentacion.index') }}" class="btn btn-secondary me-2">
+          <i class="bi bi-x-circle me-1"></i> Cancelar
+        </a>
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check-circle me-1"></i> Actualizar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

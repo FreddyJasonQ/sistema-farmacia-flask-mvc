@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Crear Nuevo Rol</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Los nombres "Administrador" y "Ventas" están reservados para roles protegidos
+        </div>
+
+        <form method="POST" action="{{ url_for('rol.create') }}">
+            <div class="mb-3">
+                <label class="form-label">Nombre del Rol*</label>
+                <input type="text" class="form-control" name="name" required>
+                <small class="form-text text-danger">No usar "Administrador" o "Ventas"</small>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Guard Name</label>
+                <input type="text" class="form-control" name="guard_name" value="web">
+                <small class="form-text text-muted">Generalmente "web" para aplicaciones web</small>
+            </div>
+
+            <!-- Sección de permisos - CORRECCIÓN APLICADA AQUÍ -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">Permisos</label>
+                <div class="border p-3 rounded">
+                    <div class="row">
+                        {% for permiso in permisos %}
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check">
+                                <!-- REMOVER LA REFERENCIA A 'rol' EN CREATE.HTML -->
+                                <input class="form-check-input" type="checkbox" name="permisos" value="{{ permiso.id }}"
+                                    id="perm-{{ permiso.id }}">
+                                <label class="form-check-label d-block" for="perm-{{ permiso.id }}">
+                                    <span class="fw-bold">{{ permiso.name }}</span>
+                                    <br>
+                                    <small class="text-muted">{{ permiso.description }}</small>
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <a href="{{ url_for('rol.index') }}" class="btn btn-secondary me-2">
+                    <i class="bi bi-x-circle me-1"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle me-1"></i> Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

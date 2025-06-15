@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Ventas{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <div class="container">
+        <!-- Encabezado -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav class="navbar navbar-expand-lg navbar-light bg-transparent p-0">
+                    <a class="navbar-brand" href="#">
+                        <i class="bi bi-shop me-2"></i>DÍJERA HUMOR
+                    </a>
+                    <div class="ms-auto">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <span class="fw-bold">Admin</span>
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn btn-light rounded-circle p-0" type="button" id="userDropdown"
+                                    data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-person-circle fs-4"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="#"><i
+                                                class="bi bi-gear me-2"></i>Configuración</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"><i
+                                                class="bi bi-box-arrow-right me-2"></i>Salir</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="sidebar">
+                    <h5 class="fw-bold mb-4">Menú Principal</h5>
+
+                    <a href="{{ url_for('home') }}" class="sidebar-item">
+                        <i class="bi bi-house-door"></i> Inicio
+                    </a>
+                    <!-- Submenú Administración -->
+                    <div class="mb-2">
+                        <button class="sidebar-item dropdown-toggle w-100 border-0 bg-transparent" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#adminSubmenu" aria-expanded="false"
+                            aria-controls="adminSubmenu" style="text-align: left;">
+                            <i class="bi bi-people me-2"></i> Administración
+                        </button>
+                        <div class="collapse mt-1" id="adminSubmenu">
+                            <a href="{{ url_for('usuario.index') }}" class="sidebar-item d-block py-1 ps-4">
+                                <i class="bi bi-person-circle me-2"></i> Usuarios
+                            </a>
+                            <a href="{{ url_for('rol.index') }}" class="sidebar-item d-block py-1 ps-4">
+                                <i class="bi bi-shield-lock me-2"></i> Roles
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Submenú Inventario -->
+                    <div class="mb-2">
+                        <button class="sidebar-item dropdown-toggle w-100 border-0 bg-transparent" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#inventarioSubmenu" aria-expanded="false"
+                            aria-controls="inventarioSubmenu" style="text-align: left;">
+                            <i class="bi bi-boxes me-2"></i> Inventario
+                        </button>
+                        <div class="collapse mt-1" id="inventarioSubmenu">
+                            <a href="{{ url_for('producto.index') }}" class="sidebar-item d-block py-1 ps-4">
+                                <i class="bi bi-box me-2"></i> Productos
+                            </a>
+                            <a href="{{ url_for('categoria.index') }}" class="sidebar-item d-block py-1 ps-4">
+                                <i class="bi bi-tags me-2"></i> Categorías
+                            </a>
+                            <a href="{{ url_for('presentacion.index') }}" class="sidebar-item d-block py-1 ps-4">
+                                <i class="bi bi-box-seam me-2"></i> Presentaciones
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Submenú Compras -->
+                    <div class="mb-2">
+                        <button class="sidebar-item dropdown-toggle w-100 border-0 bg-transparent" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#comprasSubmenu" aria-expanded="false"
+                            aria-controls="comprasSubmenu" style="text-align: left;">
+                            <i class="bi bi-cart me-2"></i> Compras
+                        </button>
+                        <div class="collapse mt-1" id="comprasSubmenu">
+                            <a href="{{ url_for('compra.index') }}" class="sidebar-item d-block py-1 ps-4">
+                                <i class="bi bi-cart-check me-2"></i> Compras
+                            </a>
+                            <a href="{{ url_for('laboratorio.index') }}" class="sidebar-item d-block py-1 ps-4">
+                                <i class="bi bi-building me-2"></i> Laboratorios
+                            </a>
+                        </div>
+                    </div>
+                    <!-- En la sección del menú lateral -->
+                    <div class="mb-2">
+                        <button class="sidebar-item dropdown-toggle w-100 border-0 bg-transparent" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#ventasSubmenu" aria-expanded="false"
+                            aria-controls="ventasSubmenu" style="text-align: left;">
+                            <i class="bi bi-currency-dollar me-2"></i> Ventas
+                        </button>
+                        <div class="collapse mt-1" id="ventasSubmenu">
+                            <a href="{{ url_for('venta.index') }}" class="sidebar-item d-block py-1 ps-4">
+                                <i class="bi bi-receipt me-2"></i> Ventas
+                            </a>
+                            <a href="{{ url_for('cliente.index') }}" class="sidebar-item d-block py-1 ps-4">
+                                <i class="bi bi-people me-2"></i> Clientes
+                            </a>
+                        </div>
+                    </div>
+                    <a href="#" class="sidebar-item">
+                        <i class="bi bi-safe"></i> Caja
+                    </a>
+
+                    <a href="#" class="sidebar-item">
+                        <i class="bi bi-building"></i> Reporte de empresa
+                    </a>
+                    <a href="#" class="sidebar-item">
+                        <i class="bi bi-graph-up"></i> Reporte de ventas
+                    </a>
+                </div>
+            </div>
+
+
+            <!-- Contenido principal -->
+            <div class="col-lg-9">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center">
+            <p class="mb-0">Todos los derechos reservados © FREDDY YUJRA 2025</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JS personalizado -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

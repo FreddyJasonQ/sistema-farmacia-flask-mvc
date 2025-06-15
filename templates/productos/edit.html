@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card shadow">
+  <div class="card-header bg-primary text-white">
+    <h2 class="mb-0">Editar Producto: {{ producto.nombre_comercial }}</h2>
+  </div>
+  
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('producto.edit', id=producto.id) }}" enctype="multipart/form-data">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label">Nombre Comercial*</label>
+          <input type="text" class="form-control" name="nombre_comercial" 
+                 value="{{ producto.nombre_comercial }}" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Nombre Genérico</label>
+          <input type="text" class="form-control" name="nombre_generico"
+                 value="{{ producto.nombre_generico or '' }}">
+        </div>
+      </div>
+      
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Categoría*</label>
+          <select class="form-select" name="categoria_id" required>
+            <option value="" disabled>Seleccione una categoría</option>
+            {% for categoria in categorias %}
+            <option value="{{ categoria.id }}" {% if categoria.id == producto.categoria_id %}selected{% endif %}>
+              {{ categoria.categoria }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Laboratorio*</label>
+          <select class="form-select" name="laboratorio_id" required>
+            <option value="" disabled>Seleccione un laboratorio</option>
+            {% for laboratorio in laboratorios %}
+            <option value="{{ laboratorio.id }}" {% if laboratorio.id == producto.laboratorio_id %}selected{% endif %}>
+              {{ laboratorio.nombre_lab }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Presentación*</label>
+          <select class="form-select" name="presentacion_id" required>
+            <option value="" disabled>Seleccione una presentación</option>
+            {% for presentacion in presentaciones %}
+            <option value="{{ presentacion.id }}" {% if presentacion.id == producto.presentacion_id %}selected{% endif %}>
+              {{ presentacion.presentacion }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Código</label>
+          <input type="text" class="form-control" name="codigo" 
+                 value="{{ producto.codigo or '' }}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Código de Barras</label>
+          <input type="text" class="form-control" name="barcode" 
+                 value="{{ producto.barcode or '' }}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Imagen</label>
+          <input type="text" class="form-control" name="imagen" 
+                 value="{{ producto.imagen or '' }}" placeholder="URL de la imagen">
+        </div>
+      </div>
+      
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Precio de Compra</label>
+          <input type="number" class="form-control" name="precio_compra" 
+                 value="{{ producto.precio_compra or 0 }}" step="0.01" min="0">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Precio de Venta</label>
+          <input type="number" class="form-control" name="precio_venta" 
+                 value="{{ producto.precio_venta or 0 }}" step="0.01" min="0">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Stock</label>
+          <input type="number" class="form-control" name="cantidad" 
+                 value="{{ producto.cantidad or 0 }}" min="0">
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-control" name="descripcion" rows="3">{{ producto.descripcion or '' }}</textarea>
+      </div>
+      
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" name="estado" id="estado"
+               {% if producto.estado %}checked{% endif %}>
+        <label class="form-check-label" for="estado">Activo</label>
+      </div>
+      
+      <div class="d-flex justify-content-end">
+        <a href="{{ url_for('producto.index') }}" class="btn btn-secondary me-2">
+          <i class="bi bi-x-circle me-1"></i> Cancelar
+        </a>
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check-circle me-1"></i> Actualizar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

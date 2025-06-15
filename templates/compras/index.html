@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Compras{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h2 class="mb-0">Registro de Compras</h2>
+    <a class="btn btn-primary" href="{{ url_for('compra.create') }}">
+      <i class="bi bi-plus-circle me-1"></i> Nueva Compra
+    </a>
+  </div>
+  
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>Comprobante</th>
+            <th>Fecha</th>
+            <th>Laboratorio</th>
+            <th>Subtotal</th>
+            <th>Descuento</th>
+            <th>Total</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for compra in compras %}
+          <tr>
+            <td>{{ compra.comprobante_tipo }} {{ compra.comprobante_numero }}</td>
+            <td>{{ compra.fecha.strftime('%d/%m/%Y') }}</td>
+            <td>{{ compra.laboratorio.nombre_lab }}</td>
+            <td>{{ compra.subtotal }}</td>
+            <td>{{ compra.descuento }}</td>
+            <td>{{ compra.total }}</td>
+            <td>
+              <a href="{{ url_for('compra.show', id=compra.id) }}" class="btn btn-sm btn-info">
+                <i class="bi bi-eye"></i>
+              </a>
+              <a href="{{ url_for('compra.delete', id=compra.id) }}" class="btn btn-sm btn-danger" 
+                 onclick="return confirm('¿Anular esta compra?')">
+                <i class="bi bi-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="7" class="text-center">No hay compras registradas</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

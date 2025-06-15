@@ -1,0 +1,151 @@
+/* Estilos para la tabla de usuarios */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table thead {
+    background-color: #f8f9fa;
+}
+
+.table th {
+    font-weight: 600;
+    color: #495057;
+    vertical-align: middle;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* Estilos para los badges de roles */
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.75em;
+}
+
+.bg-primary {
+    background-color: #4e73df !important;
+}
+
+/* Estilos para los formularios */
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+}
+
+/* Imagen de perfil */
+.img-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.placeholder-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Estilos para el menú desplegable */
+.sidebar .dropdown-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .dropdown-toggle .bi-chevron-down {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.sidebar .dropdown-toggle[aria-expanded="true"] .bi-chevron-down {
+    transform: rotate(180deg);
+}
+
+.sidebar .collapse {
+    margin-left: 15px;
+    border-left: 2px solid rgba(78, 115, 223, 0.2);
+    padding-left: 10px;
+}
+
+.sidebar .sidebar-item {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidebar .sidebar-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+/* Animación para submenús */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sidebar .collapse.show {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Indicador de menú activo */
+.sidebar .active {
+    background: linear-gradient(to right, #4e73df, #6f8be9);
+    color: white !important;
+    box-shadow: 0 3px 10px rgba(78, 115, 223, 0.3);
+}
+
+.sidebar .active i {
+    color: white;
+}
+
+.sidebar .dropdown-toggle.sidebar-item {
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    padding: 0.5rem 0;
+    color: #212529;
+    font-weight: 500;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .dropdown-toggle.sidebar-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    box-shadow: none;
+    transform: none;
+}
+
+.sidebar .collapse a.sidebar-item:hover {
+    transform: none;
+    box-shadow: none;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.45em 0.6em;
+    margin: 2px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.table td {
+    vertical-align: top;
+}

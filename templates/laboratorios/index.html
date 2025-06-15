@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Laboratorios{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h2 class="mb-0">Lista de Laboratorios</h2>
+    <a class="btn btn-primary" href="{{ url_for('laboratorio.create') }}">
+      <i class="bi bi-plus-circle me-1"></i> Nuevo Laboratorio
+    </a>
+  </div>
+  
+  <div class="card-body">
+    <!-- Barra de búsqueda -->
+    <form method="get" action="{{ url_for('laboratorio.index') }}" class="mb-4">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Buscar..." 
+               name="search" value="{{ search_query }}">
+        <button class="btn btn-outline-primary" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </form>
+    
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Responsable</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for laboratorio in laboratorios %}
+          <tr>
+            <td>{{ laboratorio.id }}</td>
+            <td>{{ laboratorio.nombre_lab }}</td>
+            <td>{{ laboratorio.direccion }}</td>
+            <td>{{ laboratorio.responsable }}</td>
+            <td>{{ laboratorio.telefono }}</td>
+            <td>
+              <a href="{{ url_for('laboratorio.edit', id=laboratorio.id) }}" class="btn btn-sm btn-warning">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <a href="{{ url_for('laboratorio.delete', id=laboratorio.id) }}" class="btn btn-sm btn-danger" 
+                 onclick="return confirm('¿Eliminar laboratorio?')">
+                <i class="bi bi-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" class="text-center">No hay laboratorios registrados</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

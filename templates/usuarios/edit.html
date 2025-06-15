@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card shadow">
+  <div class="card-header bg-warning text-dark">
+    <h2 class="mb-0">Editar Usuario</h2>
+  </div>
+
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('usuario.edit', id=usuario.id) }}">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label">Nombres</label>
+          <input type="text" class="form-control" name="nombres" value="{{ usuario.nombres }}" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Apellidos</label>
+          <input type="text" class="form-control" name="apellidos" value="{{ usuario.apellidos }}" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Carnet</label>
+          <input type="text" class="form-control" name="carnet" value="{{ usuario.carnet }}" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Fecha de Nacimiento</label>
+          <input type="date" class="form-control" name="nacimiento"
+            value="{{ usuario.nacimiento.strftime('%Y-%m-%d') }}" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Teléfono</label>
+          <input type="text" class="form-control" name="telefono" value="{{ usuario.telefono }}" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" name="email" value="{{ usuario.email }}" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Usuario</label>
+          <input type="text" class="form-control" name="usuario" value="{{ usuario.usuario }}" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label">Nueva Contraseña (opcional)</label>
+          <input type="password" class="form-control" name="password">
+          <small class="form-text text-muted">Dejar en blanco para mantener la contraseña actual</small>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Rol</label>
+          <select class="form-select" name="rol_id" required>
+            {% for rol in roles %}
+            <option value="{{ rol.id }}" {% if rol.id==usuario.rol_id %}selected{% endif %}>
+              {{ rol.name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <!-- Agregar este campo en ambos formularios -->
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <label class="form-label">URL de la Imagen</label>
+          <input type="text" class="form-control" name="imagen" value="{{ usuario.imagen if usuario.imagen else '' }}">
+          <small class="form-text text-muted">Ingrese la URL completa de la imagen</small>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end">
+        <a href="{{ url_for('usuario.index') }}" class="btn btn-secondary me-2">
+          <i class="bi bi-x-circle me-1"></i> Cancelar
+        </a>
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check-circle me-1"></i> Actualizar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
