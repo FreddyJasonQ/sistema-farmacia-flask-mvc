@@ -1,11 +1,11 @@
 from flask import Flask, render_template, redirect, url_for, request
 from database import db, init_app  # Importamos db e init_app
 from controllers import compra_controller
-from models.producto_model import Producto
 from controllers import categoria_controller
 from controllers import presentacion_controller
 from controllers import producto_controller
 from controllers import venta_controller
+from controllers import cliente_controller
 from controllers import (
     usuario_controller, 
     rol_controller,
@@ -33,6 +33,7 @@ app.register_blueprint(categoria_controller.categoria_bp)
 app.register_blueprint(presentacion_controller.presentacion_bp)
 app.register_blueprint(producto_controller.producto_bp)
 app.register_blueprint(venta_controller.venta_bp)
+app.register_blueprint(cliente_controller.cliente_bp)
 
 
 @app.context_processor
