@@ -1,7 +1,7 @@
 # 💊 Sistema de Farmacia - Flask MVC
 
 <p align="center">
-  <img src="docs/portada.png" alt="Portada del proyecto" width="600"/>
+  <img src="docs/portadas.png" alt="Portada del proyecto" width="600"/>
 </p>
 
 <p align="center">
