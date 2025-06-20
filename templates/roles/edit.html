@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Editar Rol: {{ rol.name }}</h5>
+<div class="card">
+    <div class="card-header-unified">
+        <h5 class="mb-0"><i class="bi bi-shield-lock me-2"></i>Editar Rol: {{ rol.name }}</h5>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{ url_for('rol.edit', id=rol.id) }}">
+        <form method="POST" action="{{ url_for('rol.edit', id=rol.id) }}" class="form-unified">
             <div class="mb-3">
                 <label class="form-label">Nombre del Rol*</label>
-                <input type="text" class="form-control" name="name" value="{{ rol.name }}" {% if rol.name in
-                    ['Administrador', 'Ventas' ] %}readonly{% endif %} required>
+                <input type="text" class="form-control" name="name" value="{{ rol.name }}" 
+                       {% if rol.name in ['Administrador', 'Ventas'] %}readonly{% endif %} required>
             </div>
 
             <div class="mb-3">
@@ -21,7 +21,7 @@
             <!-- Sección de permisos -->
             <div class="mb-4">
                 <label class="form-label fw-bold">Permisos</label>
-                <div class="border p-3 rounded">
+                <div class="border p-3 rounded" style="background-color: var(--light-color); border-color: var(--table-border);">
                     <div class="row">
                         {% for permiso in permisos %}
                         <div class="col-md-6 mb-3">
@@ -41,7 +41,7 @@
             </div>
 
             <div class="d-flex justify-content-end">
-                <a href="{{ url_for('rol.index') }}" class="btn btn-secondary me-2">
+                <a href="{{ url_for('rol.index') }}" class="btn btn-outline-primary me-2">
                     <i class="bi bi-x-circle me-1"></i> Cancelar
                 </a>
                 <button type="submit" class="btn btn-primary">

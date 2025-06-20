@@ -3,6 +3,7 @@ from models.rol_model import Rol
 from models.permiso_model import Permiso
 from database import db
 from views import rol_view
+from utils.decorators import permission_required 
 
 rol_bp = Blueprint('rol', __name__, url_prefix='/roles')
 
@@ -15,8 +16,10 @@ def get_all_permissions():
 
 def assign_admin_permissions(rol):
     """Asigna todos los permisos al rol Administrador"""
-    for perm in get_all_permissions():
-        rol.permisos.append(perm)
+    if rol.name == 'Administrador':
+        # Asignar todos los permisos existentes
+        all_permissions = Permiso.query.all()
+        rol.permisos = all_permissions
     return rol
 
 def assign_sales_permissions(rol):
@@ -26,16 +29,19 @@ def assign_sales_permissions(rol):
         "anular_ventas",
         "ver_historial_ventas",
         "ver_clientes",
-        "ver_productos"
+        "ver_productos",
+        "generar_reportes_ventas"
     ]
     
     for perm_name in sales_permissions:
         perm = Permiso.get_by_name(perm_name)
         if perm:
-            rol.permisos.append(perm)
+            if perm not in rol.permisos:
+                rol.permisos.append(perm)
     return rol
 
 @rol_bp.route('/')
+@permission_required('ver_roles')  # Permiso para ver roles
 def index():
     search_query = request.args.get('search', '')
     roles = Rol.query.filter(Rol.name.ilike(f'%{search_query}%')).all()
@@ -44,6 +50,7 @@ def index():
     return rol_view.list(roles, permisos, search_query)
 
 @rol_bp.route('/create', methods=['GET', 'POST'])
+@permission_required('crear_roles')  # Permiso para crear roles
 def create():
     permisos = get_all_permissions()
     
@@ -78,10 +85,15 @@ def create():
     return rol_view.create(permisos)
 
 @rol_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
+@permission_required('editar_roles')  # Permiso para editar roles
 def edit(id):
     rol = Rol.get_by_id(id)
     if not rol:
         flash('Rol no encontrado', 'danger')
+        return redirect(url_for('rol.index'))
+    
+    if request.method == 'POST' and is_protected_role(rol.name):
+        flash('No puedes modificar un rol protegido', 'danger')
         return redirect(url_for('rol.index'))
     
     permisos = get_all_permissions()
@@ -116,6 +128,7 @@ def edit(id):
     return rol_view.edit(rol, permisos, permisos_seleccionados)
 
 @rol_bp.route('/delete/<int:id>')
+@permission_required('eliminar_roles')  # Permiso para eliminar roles
 def delete(id):
     rol = Rol.get_by_id(id)
     if rol:
@@ -123,9 +136,7 @@ def delete(id):
             flash('No se puede eliminar un rol protegido', 'danger')
         else:
             # Eliminar relaciones primero
-            for perm in rol.permisos:
-                rol.permisos.remove(perm)
-            
+            rol.permisos = []
             db.session.delete(rol)
             db.session.commit()
             flash('Rol eliminado exitosamente', 'success')

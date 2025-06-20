@@ -1,30 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card shadow">
-  <div class="card-header bg-primary text-white d-flex justify-content-between">
-    <h2 class="mb-0">Detalle de Venta #{{ venta.id }}</h2>
-    <span>{{ venta.fecha.strftime('%d/%m/%Y') }}</span>
+<div class="card">
+  <div class="card-header-unified d-flex justify-content-between align-items-center">
+    <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Detalle de Venta #{{ venta.id }}</h5>
+    <span class="fw-bold">{{ venta.fecha.strftime('%d/%m/%Y') }}</span>
   </div>
   
   <div class="card-body">
     <div class="row mb-4">
       <div class="col-md-6">
-        <h5>Información de Venta</h5>
-        <p><strong>Cliente:</strong> {{ venta.cliente.nombre }}</p>
-        <p><strong>Usuario:</strong> {{ venta.usuario.usuario }}</p>
-        <p><strong>Descripción:</strong> {{ venta.descripcion or '-' }}</p>
+        <div class="content-card">
+          <h5 class="medical-title">Información de Venta</h5>
+          <p><strong>Cliente:</strong> {{ venta.cliente.nombre }}</p>
+          <p><strong>Usuario:</strong> {{ venta.usuario.usuario }}</p>
+          <p><strong>Descripción:</strong> {{ venta.descripcion or '-' }}</p>
+        </div>
       </div>
-      <div class="col-md-6 text-end">
-        <p><strong>Total:</strong> {{ venta.total }}</p>
-        <p><strong>Descuento:</strong> {{ venta.descuento }}</p>
-        <p><strong>Total Neto:</strong> {{ venta.total_neto }}</p>
+      <div class="col-md-6">
+        <div class="content-card bg-light-blue">
+          <h5 class="medical-title">Totales</h5>
+          <p class="d-flex justify-content-between">
+            <span><strong>Total:</strong></span>
+            <span>BS/ {{ venta.total }}</span>
+          </p>
+          <p class="d-flex justify-content-between">
+            <span><strong>Descuento:</strong></span>
+            <span>BS/ {{ venta.descuento }}</span>
+          </p>
+          <p class="d-flex justify-content-between fw-bold">
+            <span>Total Neto:</span>
+            <span>BS/ {{ venta.total_neto }}</span>
+          </p>
+        </div>
       </div>
     </div>
     
-    <h5>Productos Vendidos</h5>
+    <h5 class="medical-title">Productos Vendidos</h5>
     <div class="table-responsive">
-      <table class="table table-striped">
+      <table class="table table-unified">
         <thead>
           <tr>
             <th>Producto</th>
@@ -40,10 +54,10 @@
           <tr>
             <td>{{ detalle.producto.nombre_comercial }}</td>
             <td>{{ detalle.cantidad }}</td>
-            <td>{{ detalle.precio }}</td>
+            <td>S/ {{ detalle.precio }}</td>
             <td>{{ detalle.lote or '-' }}</td>
             <td>{{ detalle.vencimiento.strftime('%d/%m/%Y') if detalle.vencimiento else '-' }}</td>
-            <td>{{ detalle.cantidad * detalle.precio }}</td>
+            <td>S/ {{ detalle.cantidad * detalle.precio }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -51,7 +65,7 @@
     </div>
     
     <div class="d-flex justify-content-end mt-4">
-      <a href="{{ url_for('venta.index') }}" class="btn btn-secondary">
+      <a href="{{ url_for('venta.index') }}" class="btn btn-outline-primary">
         <i class="bi bi-arrow-left me-1"></i> Volver
       </a>
     </div>

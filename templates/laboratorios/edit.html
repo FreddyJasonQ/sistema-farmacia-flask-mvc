@@ -1,39 +1,66 @@
 {% extends 'base.html' %}
+{% block title %}Editar Laboratorio{% endblock %}
 
 {% block content %}
-<div class="card shadow">
-  <div class="card-header bg-primary text-white">
-    <h2 class="mb-0">Editar Laboratorio: {{ laboratorio.nombre_lab }}</h2>
+<div class="card">
+  <div class="card-header-unified">
+    <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Editar Laboratorio: {{ laboratorio.nombre_lab }}</h5>
   </div>
   
   <div class="card-body">
-    <form method="POST" action="{{ url_for('laboratorio.edit', id=laboratorio.id) }}">
+    <form method="POST" action="{{ url_for('laboratorio.edit', id=laboratorio.id) }}" class="form-unified">
+      {{ form.hidden_tag() }}
+      
       <div class="mb-3">
-        <label class="form-label">Nombre del Laboratorio</label>
-        <input type="text" class="form-control" name="nombre_lab" 
-               value="{{ laboratorio.nombre_lab }}" required>
+        <label class="form-label">{{ form.nombre_lab.label }}</label>
+        {{ form.nombre_lab(class="form-control") }}
+        {% if form.nombre_lab.errors %}
+            <div class="text-danger">
+                {% for error in form.nombre_lab.errors %}
+                    <small>{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endif %}
       </div>
       
       <div class="mb-3">
-        <label class="form-label">Dirección</label>
-        <input type="text" class="form-control" name="direccion" 
-               value="{{ laboratorio.direccion }}">
+        <label class="form-label">{{ form.direccion.label }}</label>
+        {{ form.direccion(class="form-control") }}
+        {% if form.direccion.errors %}
+            <div class="text-danger">
+                {% for error in form.direccion.errors %}
+                    <small>{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endif %}
       </div>
       
       <div class="mb-3">
-        <label class="form-label">Responsable</label>
-        <input type="text" class="form-control" name="responsable" 
-               value="{{ laboratorio.responsable }}">
+        <label class="form-label">{{ form.responsable.label }}</label>
+        {{ form.responsable(class="form-control") }}
+        {% if form.responsable.errors %}
+            <div class="text-danger">
+                {% for error in form.responsable.errors %}
+                    <small>{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endif %}
       </div>
       
       <div class="mb-3">
-        <label class="form-label">Teléfono</label>
-        <input type="text" class="form-control" name="telefono" 
-               value="{{ laboratorio.telefono }}">
+        <label class="form-label">{{ form.telefono.label }}</label>
+        {{ form.telefono(class="form-control") }}
+        {% if form.telefono.errors %}
+            <div class="text-danger">
+                {% for error in form.telefono.errors %}
+                    <small>{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endif %}
       </div>
       
       <div class="d-flex justify-content-end">
-        <a href="{{ url_for('laboratorio.index') }}" class="btn btn-secondary me-2">
+        <a href="{{ url_for('laboratorio.index') }}" class="btn btn-outline-primary me-2">
           <i class="bi bi-x-circle me-1"></i> Cancelar
         </a>
         <button type="submit" class="btn btn-primary">

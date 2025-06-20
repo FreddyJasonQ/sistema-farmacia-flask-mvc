@@ -1,78 +1,137 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card shadow">
-  <div class="card-header bg-warning text-dark">
-    <h2 class="mb-0">Editar Usuario</h2>
+<div class="card">
+  <div class="card-header-unified">
+    <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Editar Usuario</h5>
   </div>
 
   <div class="card-body">
-    <form method="POST" action="{{ url_for('usuario.edit', id=usuario.id) }}">
+    <form method="POST" action="{{ url_for('usuario.edit', id=usuario.id) }}" class="form-unified">
+      {{ form.hidden_tag() }}  <!-- Añadir CSRF token -->
+      
       <div class="row mb-3">
         <div class="col-md-6">
-          <label class="form-label">Nombres</label>
-          <input type="text" class="form-control" name="nombres" value="{{ usuario.nombres }}" required>
+          {{ form.nombres.label(class="form-label") }}
+          {{ form.nombres(class="form-control" + (' is-invalid' if form.nombres.errors else '')) }}
+          {% if form.nombres.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.nombres.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
         <div class="col-md-6">
-          <label class="form-label">Apellidos</label>
-          <input type="text" class="form-control" name="apellidos" value="{{ usuario.apellidos }}" required>
+          {{ form.apellidos.label(class="form-label") }}
+          {{ form.apellidos(class="form-control" + (' is-invalid' if form.apellidos.errors else '')) }}
+          {% if form.apellidos.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.apellidos.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
       </div>
 
       <div class="row mb-3">
         <div class="col-md-4">
-          <label class="form-label">Carnet</label>
-          <input type="text" class="form-control" name="carnet" value="{{ usuario.carnet }}" required>
+          {{ form.carnet.label(class="form-label") }}
+          {{ form.carnet(class="form-control" + (' is-invalid' if form.carnet.errors else '')) }}
+          {% if form.carnet.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.carnet.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
         <div class="col-md-4">
-          <label class="form-label">Fecha de Nacimiento</label>
-          <input type="date" class="form-control" name="nacimiento"
-            value="{{ usuario.nacimiento.strftime('%Y-%m-%d') }}" required>
+          {{ form.nacimiento.label(class="form-label") }}
+          {{ form.nacimiento(class="form-control" + (' is-invalid' if form.nacimiento.errors else '')) }}
+          {% if form.nacimiento.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.nacimiento.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
         <div class="col-md-4">
-          <label class="form-label">Teléfono</label>
-          <input type="text" class="form-control" name="telefono" value="{{ usuario.telefono }}" required>
+          {{ form.telefono.label(class="form-label") }}
+          {{ form.telefono(class="form-control" + (' is-invalid' if form.telefono.errors else '')) }}
+          {% if form.telefono.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.telefono.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
       </div>
 
       <div class="row mb-3">
         <div class="col-md-6">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-control" name="email" value="{{ usuario.email }}" required>
+          {{ form.email.label(class="form-label") }}
+          {{ form.email(class="form-control" + (' is-invalid' if form.email.errors else '')) }}
+          {% if form.email.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.email.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
         <div class="col-md-6">
-          <label class="form-label">Usuario</label>
-          <input type="text" class="form-control" name="usuario" value="{{ usuario.usuario }}" required>
+          {{ form.usuario.label(class="form-label") }}
+          {{ form.usuario(class="form-control" + (' is-invalid' if form.usuario.errors else '')) }}
+          {% if form.usuario.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.usuario.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
       </div>
 
       <div class="row mb-3">
         <div class="col-md-6">
-          <label class="form-label">Nueva Contraseña (opcional)</label>
-          <input type="password" class="form-control" name="password">
+          {{ form.password.label(class="form-label") }}
+          {{ form.password(class="form-control" + (' is-invalid' if form.password.errors else '')) }}
+          {% if form.password.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.password.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
           <small class="form-text text-muted">Dejar en blanco para mantener la contraseña actual</small>
         </div>
         <div class="col-md-6">
-          <label class="form-label">Rol</label>
-          <select class="form-select" name="rol_id" required>
-            {% for rol in roles %}
-            <option value="{{ rol.id }}" {% if rol.id==usuario.rol_id %}selected{% endif %}>
-              {{ rol.name }}
-            </option>
-            {% endfor %}
-          </select>
+          {{ form.rol_id.label(class="form-label") }}
+          {{ form.rol_id(class="form-select" + (' is-invalid' if form.rol_id.errors else '')) }}
+          {% if form.rol_id.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.rol_id.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
       </div>
-      <!-- Agregar este campo en ambos formularios -->
+      
       <div class="row mb-3">
         <div class="col-md-12">
-          <label class="form-label">URL de la Imagen</label>
-          <input type="text" class="form-control" name="imagen" value="{{ usuario.imagen if usuario.imagen else '' }}">
+          {{ form.imagen.label(class="form-label") }}
+          {{ form.imagen(class="form-control") }}
           <small class="form-text text-muted">Ingrese la URL completa de la imagen</small>
         </div>
       </div>
+      
       <div class="d-flex justify-content-end">
-        <a href="{{ url_for('usuario.index') }}" class="btn btn-secondary me-2">
+        <a href="{{ url_for('usuario.index') }}" class="btn btn-outline-primary me-2">
           <i class="bi bi-x-circle me-1"></i> Cancelar
         </a>
         <button type="submit" class="btn btn-primary">

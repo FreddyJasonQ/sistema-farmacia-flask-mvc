@@ -1,147 +1,263 @@
 {% extends "base.html" %}
-
 {% block title %}Dashboard - Sistema de Ventas{% endblock %}
-
 {% block content %}
-    <!-- Estadísticas principales -->
-    <div class="row">
-        <div class="col-md-6 col-lg-3">
-            <div class="stat-card" style="background: linear-gradient(135deg, #4e73df, #6f8be9);">
-                <div class="icon animated-icon">
-                    <i class="bi bi-cash-coin"></i>
-                </div>
-                <h3>Bs. 155.00</h3>
-                <p>VOTAS (APES)</p>
+<div class="card">
+    <!-- Header del Dashboard -->
+    <div class="dashboard-header">
+        <h1><i class="bi bi-speedometer2 me-2"></i> Panel de Control</h1>
+        <div class="header-date">
+            <span id="current-date"></span>
+        </div>
+    </div>
+
+    <!-- Tarjetas de Resumen -->
+    <div class="summary-cards">
+        {% for item in resumen %}
+        <div class="summary-card">
+            <div class="card-icon" style="background: {{ item.color }};">
+                <i class="bi 
+                {% if item.nombre == 'Ventas Totales' or item.nombre == 'Ventas del Mes' %}bi-cash-coin
+                {% elif item.nombre == 'Clientes Nuevos' %}bi-people
+                {% else %}bi-box{% endif %}">
+                </i>
+            </div>
+            <div class="card-content">
+                <h3>
+                    {% if item.es_dinero %}Bs. {{ "%.2f"|format(item.monto) }}
+                    {% else %}{{ item.monto|int }}{% endif %}
+                </h3>
+                <p>{{ item.nombre }}</p>
             </div>
         </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="stat-card" style="background: linear-gradient(135deg, #1cc88a, #34d399);">
-                <div class="icon animated-icon">
-                    <i class="bi bi-wallet2"></i>
+        {% endfor %}
+    </div>
+
+    <!-- Fila de Gráficos -->
+    <div class="chart-row">
+        <!-- Gráfico de Ventas Mensuales -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h3><i class="bi bi-bar-chart me-2"></i> Ventas por Mes</h3>
+                <div class="time-filter">
+                    <button class="filter-btn active" data-period="month">Mes</button>
+                    <button class="filter-btn" data-period="quarter">Trimestre</button>
+                    <button class="filter-btn" data-period="year">Año</button>
                 </div>
-                <h3>Bs. 920.00</h3>
-                <p>CONTROL (MARIA)</p>
+            </div>
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
             </div>
         </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="stat-card" style="background: linear-gradient(135deg, #f6c23e, #fbbf24);">
-                <div class="icon animated-icon">
-                    <i class="bi bi-currency-exchange"></i>
-                </div>
-                <h3>Bs. 975.00</h3>
-                <p>VOTERO (MARIA)</p>
+
+        <!-- Gráfico de Ventas por Categoría -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h3><i class="bi bi-pie-chart me-2"></i> Ventas por Categoría</h3>
             </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="stat-card" style="background: linear-gradient(135deg, #36b9cc, #22d3ee);">
-                <div class="icon animated-icon">
-                    <i class="bi bi-graph-up-arrow"></i>
-                </div>
-                <h3>Bs. 55</h3>
-                <p>UTILIDAD (MARIA)</p>
+            <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
             </div>
         </div>
     </div>
-    
-    <!-- Gráfico de ventas -->
-    <div class="dashboard-card">
-        <div class="card-header">
-            <i class="bi bi-bar-chart me-2"></i> Ventas por mes
-        </div>
-        <div class="card-body">
-            <div class="d-flex align-items-end justify-content-around" style="height: 250px;">
-                <div class="chart-bar" style="height: 85%;" data-value="1.000/50"></div>
-                <div class="chart-bar" style="height: 60%;" data-value="800/40"></div>
-                <div class="chart-bar" style="height: 45%;" data-value="600/30"></div>
-                <div class="chart-bar" style="height: 30%;" data-value="400/20"></div>
-                <div class="chart-bar" style="height: 70%;" data-value="900/45"></div>
-                <div class="chart-bar" style="height: 50%;" data-value="50/100"></div>
-                <div class="chart-bar" style="height: 65%;" data-value="700/35"></div>
-                <div class="chart-bar" style="height: 40%;" data-value="0/50"></div>
-                <div class="chart-bar" style="height: 75%;" data-value="850/42"></div>
+
+    <!-- Segunda fila -->
+    <div class="chart-row">
+        <!-- sección de "Ventas  -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h3><i class="bi bi-cash me-2"></i> Ventas de Hoy</h3>
             </div>
-            <div class="chart-months mt-4">
-                <span>Enero</span>
-                <span>Febrero</span>
-                <span>Marzo</span>
-                <span>Abril</span>
-                <span>Mayo</span>
-                <span>Junio</span>
-                <span>Julio</span>
-                <span>Agosto</span>
-                <span>Septiembre</span>
-            </div>
-        </div>
-    </div>
-    
-    <div class="row">
-        <!-- Ventas por asumat -->
-        <div class="col-lg-6">
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <i class="bi bi-calendar-check me-2"></i> Ventas por asumat 2024
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <h4 class="fw-bold text-primary">Bs. {{ "%.2f"|format(ventas_hoy) }}</h4>
+                        <p class="mb-0">{{ hoy.strftime('%d/%m/%Y') }}</p>
+                    </div>
+                    <div class="display-4 text-primary">
+                        <i class="bi bi-currency-exchange"></i>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <div>
-                            <h4 class="fw-bold text-primary">R.A.U/D</h4>
-                            <p class="mb-1">Asumat 1</p>
-                            <p class="mb-0">Asumat posible</p>
-                        </div>
-                        <div class="display-4 text-primary">
-                            <i class="bi bi-calendar-event"></i>
-                        </div>
-                    </div>
-                    <div class="progress mb-3" style="height: 20px;">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" 
-                             aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
-                    </div>
-                    <div class="text-center">
-                        <button class="btn btn-outline-primary">
-                            <i class="bi bi-arrow-right-circle me-2"></i>Ver detalles
-                        </button>
-                    </div>
+                <div class="text-center">
+                    <button class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-right-circle me-2"></i>Ver detalles
+                    </button>
                 </div>
             </div>
         </div>
-        
+
         <!-- Productos más vendidos -->
-        <div class="col-lg-6">
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <i class="bi bi-star me-2"></i> Productos más vendidos del mes
-                </div>
-                <div class="card-body">
-                    <div class="product-item">
-                        <div class="flex-grow-1">
-                            <h6 class="mb-0 fw-bold">MARTIN</h6>
-                            <small class="text-muted">Categoría: Medicamentos</small>
-                        </div>
-                        <span class="badge bg-primary">25 ventas</span>
+        <div class="chart-card">
+            <div class="card-header">
+                <h3><i class="bi bi-star me-2"></i> Productos más vendidos</h3>
+            </div>
+            <div class="product-list">
+                {% for producto in productos_mas_vendidos %}
+                <div class="product-item">
+                    <div class="product-info">
+                        <h5>{{ producto.nombre_comercial }}</h5>
+                        <small>Categoría: {{ producto.categoria.categoria if producto.categoria else 'Sin categoría'
+                            }}</small>
                     </div>
-                    <div class="product-item">
-                        <div class="flex-grow-1">
-                            <h6 class="mb-0 fw-bold">PRODUCTO TEST</h6>
-                            <small class="text-muted">Categoría: Suplementos</small>
+                    <div class="sales-count">
+                        <!-- Mostramos la cantidad vendida -->
+                        <span>{{ producto.cantidad_vendida|int }} unidades</span>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar"
+                                style="width: {{ (producto.cantidad_vendida / max_ventas) * 100 }}%">
+                            </div>
                         </div>
-                        <span class="badge bg-primary">18 ventas</span>
-                    </div>
-                    <div class="product-item">
-                        <div class="flex-grow-1">
-                            <h6 class="mb-0 fw-bold">Muscatata</h6>
-                            <small class="text-muted">Categoría: Cosméticos</small>
-                        </div>
-                        <span class="badge bg-primary">15 ventas</span>
-                    </div>
-                    <div class="product-item">
-                        <div class="flex-grow-1">
-                            <h6 class="mb-0 fw-bold">Muscatata</h6>
-                            <small class="text-muted">Categoría: Cosméticos</small>
-                        </div>
-                        <span class="badge bg-primary">12 ventas</span>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
+
+    <!-- Últimas ventas -->
+    <div class="chart-card">
+        <div class="card-header">
+            <h3><i class="bi bi-receipt me-2"></i> Últimas Ventas</h3>
+        </div>
+        <div class="recent-sales">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venta in ultimas_ventas %}
+                    <tr>
+                        <td>#{{ venta.id }}</td>
+                        <td>{{ venta.cliente.nombre if venta.cliente else 'Sin cliente' }}</td>
+                        <td>{{ venta.fecha.strftime('%d/%m/%Y') }}</td>
+                        <td>Bs. {{ "%.2f"|format(venta.total_neto) }}</td>
+                        <td><span class="badge bg-success">Completada</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Incluir Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Datos para gráficos desde el backend
+    const salesData = {
+        labels: {{ datos_ventas_mensuales.labels| safe }},
+    datasets: [{
+        label: 'Ventas Mensuales (Bs.)',
+        data: {{ datos_ventas_mensuales.data | safe }},
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 2,
+        tension: 0.3,
+        fill: true
+        }]
+    };
+
+    const categoryData = {
+        labels: {{ datos_ventas_categoria.labels| safe }},
+    datasets: [{
+        data: {{ datos_ventas_categoria.data | safe }},
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.7)',
+        'rgba(54, 162, 235, 0.7)',
+        'rgba(255, 206, 86, 0.7)',
+        'rgba(75, 192, 192, 0.7)',
+        'rgba(153, 102, 255, 0.7)',
+        'rgba(255, 159, 64, 0.7)',
+        'rgba(199, 199, 199, 0.7)'
+    ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(199, 199, 199, 1)'
+    ],
+        borderWidth: 1
+        }]
+    };
+
+    // Inicializar gráficos
+    document.addEventListener('DOMContentLoaded', function () {
+        // Gráfico de ventas
+        const salesChart = new Chart(
+            document.getElementById('salesChart'),
+            {
+                type: 'line',
+                data: salesData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
+        // Gráfico de categorías
+        const categoryChart = new Chart(
+            document.getElementById('categoryChart'),
+            {
+                type: 'doughnut',
+                data: categoryData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    },
+                    cutout: '70%'
+                }
+            }
+        );
+
+        // Filtros de tiempo
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // Aquí deberías actualizar los datos del gráfico según el período seleccionado
+                // Esto requeriría una llamada AJAX al backend para obtener nuevos datos
+            });
+        });
+
+        // Actualizar fecha actual
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('es-ES', options);
+    });
+</script>
 {% endblock %}

@@ -1,32 +1,59 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card shadow">
-  <div class="card-header bg-primary text-white">
-    <h2 class="mb-0">Editar Categoría: {{ categoria.categoria }}</h2>
+<div class="card">
+  <div class="card-header-unified">
+    <h2 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Editar Categoría: {{ categoria.categoria }}</h2>
   </div>
   
   <div class="card-body">
-    <form method="POST" action="{{ url_for('categoria.edit', id=categoria.id) }}">
-      <div class="mb-3">
-        <label class="form-label">Nombre de la Categoría</label>
-        <input type="text" class="form-control" name="categoria" 
-               value="{{ categoria.categoria }}" required>
+    <form method="POST" action="{{ url_for('categoria.edit', id=categoria.id) }}" class="form-unified">
+      {{ form.hidden_tag() }}  <!-- Añadir CSRF token -->
+      
+      <div class="content-card mb-4">
+        <h5 class="medical-title"><i class="bi bi-tag"></i> Datos de la Categoría</h5>
+        
+        <div class="mb-3">
+          <label class="form-label fw-bold">Nombre de la Categoría</label>
+          {{ form.categoria(
+                class="form-control " + ("is-invalid" if form.categoria.errors else "")
+          ) }}
+          {% if form.categoria.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.categoria.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label fw-bold">Descripción</label>
+          {{ form.descripcion(
+                class="form-control " + ("is-invalid" if form.descripcion.errors else ""),
+                rows="3"
+          ) }}
+          {% if form.descripcion.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.descripcion.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="mb-3 form-switch">
+          {{ form.estado(
+                class="form-check-input",
+                role="switch",
+                id="estado"
+          ) }}
+          <label class="form-check-label fw-bold" for="estado">Categoría Activa</label>
+        </div>
       </div>
       
-      <div class="mb-3">
-        <label class="form-label">Descripción</label>
-        <textarea class="form-control" name="descripcion" rows="3">{{ categoria.descripcion or '' }}</textarea>
-      </div>
-      
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" name="estado" id="estado"
-               {% if categoria.estado %}checked{% endif %}>
-        <label class="form-check-label" for="estado">Activo</label>
-      </div>
-      
-      <div class="d-flex justify-content-end">
-        <a href="{{ url_for('categoria.index') }}" class="btn btn-secondary me-2">
+      <div class="d-flex justify-content-end mt-4">
+        <a href="{{ url_for('categoria.index') }}" class="btn btn-outline-secondary me-2">
           <i class="bi bi-x-circle me-1"></i> Cancelar
         </a>
         <button type="submit" class="btn btn-primary">

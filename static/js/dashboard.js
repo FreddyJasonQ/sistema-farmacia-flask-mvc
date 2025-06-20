@@ -32,24 +32,4 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   });
   
-  // Animación para los elementos del sidebar
-  document.querySelectorAll('.sidebar-item').forEach(item => {
-      item.addEventListener('mouseenter', () => {
-          item.style.transform = 'translateX(5px)';
-      });
-      
-      item.addEventListener('mouseleave', () => {
-          item.style.transform = 'translateX(0)';
-      });
-  });
-
-  document.addEventListener('DOMContentLoaded', function () {
-    // Activar submenú si estás en la sección "Administración > Roles"
-    const adminMenu = document.querySelector('#adminMenu');
-    if (adminMenu && window.location.pathname.includes('/roles')) {
-        const submenu = new bootstrap.Collapse(adminMenu, { toggle: false });
-        submenu.show();
-    }
-});
-
 });

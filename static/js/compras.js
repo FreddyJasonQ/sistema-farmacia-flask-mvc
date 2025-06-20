@@ -90,3 +90,47 @@ document.addEventListener('DOMContentLoaded', function() {
         agregarFila();
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('compraForm');
+    
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Validar laboratorio
+        if (!form.laboratorio_id.value) {
+            alert('Seleccione un laboratorio');
+            isValid = false;
+        }
+        
+        // Validar detalles
+        const productos = document.querySelectorAll('select.producto-select');
+        if (productos.length === 0) {
+            alert('Debe agregar al menos un producto');
+            isValid = false;
+        }
+        
+        productos.forEach((select, index) => {
+            if (!select.value) {
+                alert(`Fila ${index + 1}: Seleccione un producto`);
+                isValid = false;
+            }
+            
+            const cantidad = select.closest('tr').querySelector('.cantidad');
+            if (!cantidad.value || parseInt(cantidad.value) < 1) {
+                alert(`Fila ${index + 1}: Cantidad inválida`);
+                isValid = false;
+            }
+            
+            const costo = select.closest('tr').querySelector('.costo');
+            if (!costo.value || parseFloat(costo.value) <= 0) {
+                alert(`Fila ${index + 1}: Costo inválido`);
+                isValid = false;
+            }
+        });
+        
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});

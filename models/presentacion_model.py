@@ -12,9 +12,6 @@ class Presentacion(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     deleted_at = db.Column(db.DateTime)
 
-    # Relación con productos (comentada temporalmente)
-    # productos = db.relationship('Producto', backref='presentacion', lazy=True)
-
     def __init__(self, presentacion, descripcion=None, estado=True):
         self.presentacion = presentacion
         self.descripcion = descripcion

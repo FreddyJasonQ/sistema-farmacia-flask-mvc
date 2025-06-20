@@ -13,10 +13,6 @@ class Laboratorio(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     deleted_at = db.Column(db.DateTime)
 
-    # Relación con productos
-    #productos = db.relationship('Producto', backref='laboratorio', lazy=True)
-    #compras = db.relationship('Compra', backref='laboratorio', lazy=True)
-
     def __init__(self, nombre_lab, direccion=None, responsable=None, telefono=None):
         self.nombre_lab = nombre_lab
         self.direccion = direccion

@@ -3,11 +3,10 @@ from flask import render_template
 def venta_index(ventas):
     return render_template('ventas/index.html', ventas=ventas)
 
-def venta_create(clientes, productos, usuarios, hoy):
+def venta_create(clientes, productos, hoy):
     return render_template('ventas/create.html', 
                           clientes=clientes, 
                           productos=productos,
-                          usuarios=usuarios,
                           hoy=hoy)
 
 def venta_show(venta):

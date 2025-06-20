@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
+{% block title %}Detalle Compra{% endblock %}
 
 {% block content %}
-<div class="card shadow">
-  <div class="card-header bg-primary text-white d-flex justify-content-between">
-    <h2 class="mb-0">Detalle de Compra</h2>
-    <span>{{ compra.comprobante_tipo }} {{ compra.comprobante_numero }}</span>
+<div class="card">
+  <div class="card-header-unified d-flex justify-content-between align-items-center">
+    <h2 class="mb-0"><i class="bi bi-receipt me-2"></i>Detalle de Compra</h2>
+    <span class="badge bg-primary">{{ compra.comprobante_tipo }} {{ compra.comprobante_numero }}</span>
   </div>
-  
+
   <div class="card-body">
     <div class="row mb-4">
       <div class="col-md-6">
-        <h5>Información de Compra</h5>
+        <h5>Información</h5>
         <p><strong>Fecha:</strong> {{ compra.fecha.strftime('%d/%m/%Y') }}</p>
         <p><strong>Laboratorio:</strong> {{ compra.laboratorio.nombre_lab }}</p>
         <p><strong>Registrado por:</strong> {{ compra.usuario.nombres }} {{ compra.usuario.apellidos }}</p>
@@ -21,10 +22,10 @@
         <p><strong>Total:</strong> {{ compra.total }}</p>
       </div>
     </div>
-    
+
     <h5>Productos Comprados</h5>
     <div class="table-responsive">
-      <table class="table table-striped">
+      <table class="table table-unified">
         <thead>
           <tr>
             <th>Producto</th>
@@ -49,7 +50,7 @@
         </tbody>
       </table>
     </div>
-    
+
     <div class="d-flex justify-content-end mt-4">
       <a href="{{ url_for('compra.index') }}" class="btn btn-secondary">
         <i class="bi bi-arrow-left me-1"></i> Volver

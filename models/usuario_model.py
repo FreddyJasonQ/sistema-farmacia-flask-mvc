@@ -62,7 +62,7 @@ class Usuario(db.Model):
             (Usuario.apellidos.ilike(f'%{query}%')) |
             (Usuario.email.ilike(f'%{query}%')) |
             (Usuario.usuario.ilike(f'%{query}%')) |
-            (Usuario.rol.has(Rol.name.ilike(f'%{query}%')))  # Corregido
+            (Usuario.rol.has(Rol.name.ilike(f'%{query}%')))  
         ).filter_by(deleted_at=None).all()
             
     def update(self, **kwargs):
@@ -78,3 +78,57 @@ class Usuario(db.Model):
     def delete(self):
         self.deleted_at = datetime.utcnow()
         db.session.commit()
+        
+    # Métodos Flask-Login
+    def get_id(self):
+        return str(self.id)
+    
+    @property
+    def is_active(self):
+        return True
+    
+    @property
+    def is_authenticated(self):
+        return True
+    
+    @property
+    def is_anonymous(self):
+        return False
+    
+    # Métodos de contraseña
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+    
+    def get_rol(self):
+        return self.rol.name if self.rol else None
+
+    def has_permission(self, permission_name):
+        """Verifica si el usuario tiene un permiso específico"""
+        # Administrador tiene todos los permisos
+        if self.rol and self.rol.name == 'Administrador':
+            return True
+            
+        # Buscar permiso en el rol
+        if self.rol:
+            for permiso in self.rol.permisos:
+                if permiso.name == permission_name:
+                    return True
+        return False
+    
+    def is_admin(self):
+        """Verifica si el usuario tiene rol de Administrador"""
+        return self.rol and self.rol.name == 'Administrador'
+    
+    def has_permission(self, permission_name):
+        """Verifica si el usuario tiene un permiso específico"""
+        # Administradores tienen todos los permisos
+        if self.is_admin():
+            return True
+            
+        # Para otros roles, verificar permisos asignados
+        if self.rol:
+            return any(perm.name == permission_name for perm in self.rol.permisos)
+        return False

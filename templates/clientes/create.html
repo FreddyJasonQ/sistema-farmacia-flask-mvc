@@ -1,51 +1,110 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card shadow">
-  <div class="card-header bg-primary text-white">
-    <h2 class="mb-0">Crear Nuevo Cliente</h2>
+<div class="card">
+  <div class="card-header-unified">
+    <h2 class="mb-0"><i class="bi bi-person-plus me-2"></i>Crear Nuevo Cliente</h2>
   </div>
   
   <div class="card-body">
-    <form method="POST">
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label class="form-label">Nombre*</label>
-          <input type="text" class="form-control" name="nombre" required>
+    <form method="POST" class="form-unified">
+      {{ form.hidden_tag() }}
+      
+      <div class="content-card mb-4">
+        <h5 class="medical-title"><i class="bi bi-person-badge"></i> Información Personal</h5>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Nombre*</label>
+            {{ form.nombre(
+                  class="form-control " + ("is-invalid" if form.nombre.errors else ""),
+                  placeholder="Nombre completo"
+            ) }}
+            {% if form.nombre.errors %}
+              <div class="invalid-feedback">
+                {% for error in form.nombre.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Tipo Documento*</label>
+            {{ form.tipo_documento(
+                  class="form-select " + ("is-invalid" if form.tipo_documento.errors else "")
+            ) }}
+            {% if form.tipo_documento.errors %}
+              <div class="invalid-feedback">
+                {% for error in form.tipo_documento.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
         </div>
-        <div class="col-md-6">
-          <label class="form-label">Tipo Documento*</label>
-          <select class="form-select" name="tipo_documento" required>
-            <option value="CI">Cédula de Identidad</option>
-            <option value="NIT">NIT</option>
-            <option value="Pasaporte">Pasaporte</option>
-            <option value="Otro">Otro</option>
-          </select>
+        
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Documento*</label>
+            {{ form.documento(
+                  class="form-control " + ("is-invalid" if form.documento.errors else ""),
+                  placeholder="Número de documento"
+            ) }}
+            {% if form.documento.errors %}
+              <div class="invalid-feedback">
+                {% for error in form.documento.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Complemento</label>
+            {{ form.complemento(
+                  class="form-control " + ("is-invalid" if form.complemento.errors else ""),
+                  placeholder="Complemento (opcional)"
+            ) }}
+            {% if form.complemento.errors %}
+              <div class="invalid-feedback">
+                {% for error in form.complemento.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Teléfono*</label>
+            {{ form.telefono(
+                  class="form-control " + ("is-invalid" if form.telefono.errors else ""),
+                  placeholder="Teléfono de contacto"
+            ) }}
+            {% if form.telefono.errors %}
+              <div class="invalid-feedback">
+                {% for error in form.telefono.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
       
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <label class="form-label">Documento*</label>
-          <input type="text" class="form-control" name="documento" required>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Complemento</label>
-          <input type="text" class="form-control" name="complemento">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Teléfono*</label>
-          <input type="text" class="form-control" name="telefono" required>
+      <div class="content-card mb-4">
+        <h5 class="medical-title"><i class="bi bi-toggle-on"></i> Estado del Cliente</h5>
+        <div class="mb-3 form-switch">
+          {{ form.estado(
+                class="form-check-input",
+                role="switch",
+                id="estado"
+          ) }}
+          <label class="form-check-label fw-bold" for="estado">Cliente Activo</label>
         </div>
       </div>
       
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" name="estado" id="estado" checked>
-        <label class="form-check-label" for="estado">Activo</label>
-      </div>
-      
-      <div class="d-flex justify-content-end">
-        <a href="{{ url_for('cliente.index') }}" class="btn btn-secondary me-2">
+      <div class="d-flex justify-content-end mt-4">
+        <a href="{{ url_for('cliente.index') }}" class="btn btn-outline-secondary me-2">
           <i class="bi bi-x-circle me-1"></i> Cancelar
         </a>
         <button type="submit" class="btn btn-primary">

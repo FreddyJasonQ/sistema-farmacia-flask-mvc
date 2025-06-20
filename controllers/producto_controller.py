@@ -4,10 +4,12 @@ from models.categoria_model import Categoria
 from models.laboratorio_model import Laboratorio
 from models.presentacion_model import Presentacion
 from views import producto_view
+from utils.decorators import permission_required  
 
 producto_bp = Blueprint('producto', __name__, url_prefix='/productos')
 
 @producto_bp.route('/')
+@permission_required('ver_productos')  # Permiso único para ver productos
 def index():
     search_query = request.args.get('search', '')
     
@@ -19,6 +21,7 @@ def index():
     return producto_view.index(productos, search_query)
 
 @producto_bp.route('/create', methods=['GET', 'POST'])
+@permission_required('crear_productos')  # Permiso único para crear productos
 def create():
     categorias = Categoria.get_all()
     laboratorios = Laboratorio.get_all()
@@ -37,7 +40,7 @@ def create():
         estado = 'estado' in request.form
         codigo = request.form['codigo']
         barcode = request.form['barcode']
-        imagen = request.form['imagen']  # En realidad esto debería ser un archivo, pero por ahora es un string
+        imagen = request.form['imagen']  
         
         nuevo_producto = Producto(
             nombre_comercial=nombre_comercial,
@@ -61,6 +64,7 @@ def create():
     return producto_view.create(categorias, laboratorios, presentaciones)
 
 @producto_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
+@permission_required('editar_productos')  # Permiso único para editar productos
 def edit(id):
     producto = Producto.get_by_id(id)
     if not producto:
@@ -93,6 +97,7 @@ def edit(id):
     return producto_view.edit(producto, categorias, laboratorios, presentaciones)
 
 @producto_bp.route('/delete/<int:id>')
+@permission_required('eliminar_productos')  # Permiso único para eliminar productos
 def delete(id):
     producto = Producto.get_by_id(id)
     if producto:

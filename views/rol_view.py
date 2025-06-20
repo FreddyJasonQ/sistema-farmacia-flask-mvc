@@ -4,7 +4,6 @@ def list(roles, permisos, search_query):
     return render_template('roles/index.html', roles=roles, permisos=permisos, search_query=search_query)
 
 def create(permisos):
-    # Crear un rol vacío para evitar errores en la plantilla
     rol = None
     return render_template('roles/create.html', permisos=permisos, rol=rol)
 

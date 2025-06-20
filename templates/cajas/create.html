@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Nueva Caja{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header-unified">
+    <h2 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Crear Nueva Caja</h2>
+  </div>
+  
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('caja.create') }}" class="form-unified">
+      {{ form.hidden_tag() }}  <!-- Añadir CSRF token -->
+      
+      <div class="content-card mb-4">
+        <h5 class="medical-title"> Información de la Caja</h5>
+        
+        <div class="mb-3">
+          <label class="form-label fw-bold">Descripción</label>
+          {{ form.descripcion(
+                class="form-control " + ("is-invalid" if form.descripcion.errors else ""),
+                placeholder="Descripción de la caja"
+          ) }}
+          {% if form.descripcion.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.descripcion.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label fw-bold">Monto de Apertura</label>
+          <div class="input-group">
+            <span class="input-group-text">Bs/</span>
+            {{ form.monto_apertura(
+                  class="form-control " + ("is-invalid" if form.monto_apertura.errors else ""),
+                  step="0.01",
+                  min="0"
+            ) }}
+          </div>
+          {% if form.monto_apertura.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.monto_apertura.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mt-4">
+        <a href="{{ url_for('caja.index') }}" class="btn btn-outline-secondary me-2">Cancelar</a>
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check-circle me-1"></i> Crear Caja
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,12 +1,17 @@
-from flask import request, redirect, url_for, Blueprint, render_template
+from flask import request, redirect, url_for, Blueprint
 from models.usuario_model import Usuario
+from werkzeug.security import generate_password_hash
+from utils.decorators import permission_required  
+from flask_login import login_required, current_user
 from views import usuario_view
 from datetime import datetime
 from models.rol_model import Rol
+from forms.forms import UsuarioCreateForm, UsuarioEditForm
 
 usuario_bp = Blueprint('usuario', __name__, url_prefix='/usuarios')
 
 @usuario_bp.route('/')
+@permission_required('ver_usuarios')  
 def index():
     search_query = request.args.get('search', '')
     
@@ -18,39 +23,32 @@ def index():
     return usuario_view.list(usuarios, search_query)
 
 @usuario_bp.route('/create', methods=['GET', 'POST'])
+@login_required
 def create():
     roles = Rol.query.all()
+    form = UsuarioCreateForm()
+    form.rol_id.choices = [(rol.id, rol.name) for rol in roles]
     
-    if request.method == 'POST':
-        nombres = request.form['nombres']
-        apellidos = request.form['apellidos']
-        carnet = request.form['carnet']
-        nacimiento = datetime.strptime(request.form['nacimiento'], '%Y-%m-%d').date()
-        telefono = request.form['telefono']
-        email = request.form['email']
-        usuario = request.form['usuario']
-        password = request.form['password']
-        imagen = request.form.get('imagen', None)
-        rol_id = request.form['rol_id']
-        
+    if form.validate_on_submit():
         nuevo_usuario = Usuario(
-            nombres=nombres,
-            apellidos=apellidos,
-            carnet=carnet,
-            nacimiento=nacimiento,
-            telefono=telefono,
-            email=email,
-            usuario=usuario,
-            password=password,
-            imagen=imagen,
-            rol_id=rol_id
+            nombres=form.nombres.data,
+            apellidos=form.apellidos.data,
+            carnet=form.carnet.data,
+            nacimiento=form.nacimiento.data,
+            telefono=form.telefono.data,
+            email=form.email.data,
+            usuario=form.usuario.data,
+            password=generate_password_hash(form.password.data),
+            imagen=form.imagen.data,
+            rol_id=form.rol_id.data
         )
         nuevo_usuario.save()
         return redirect(url_for('usuario.index'))
     
-    return usuario_view.create(roles)
+    return usuario_view.create(roles, form=form)
 
 @usuario_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit(id):
     usuario = Usuario.get_by_id(id)
     roles = Rol.query.all()
@@ -58,39 +56,33 @@ def edit(id):
     if not usuario:
         return "Usuario no encontrado", 404
     
-    if request.method == 'POST':
-        nombres = request.form['nombres']
-        apellidos = request.form['apellidos']
-        carnet = request.form['carnet']
-        nacimiento = datetime.strptime(request.form['nacimiento'], '%Y-%m-%d').date()
-        telefono = request.form['telefono']
-        email = request.form['email']
-        usuario_form = request.form['usuario']
-        imagen = request.form.get('imagen', None)
-        rol_id = request.form['rol_id']
-        password = request.form.get('password', None)
-        
+    form = UsuarioEditForm(obj=usuario)
+    form.rol_id.choices = [(rol.id, rol.name) for rol in roles]
+    form.usuario_actual = usuario  # Pasar usuario actual para validaciones
+    
+    if form.validate_on_submit():
         update_data = {
-            'nombres': nombres,
-            'apellidos': apellidos,
-            'carnet': carnet,
-            'nacimiento': nacimiento,
-            'telefono': telefono,
-            'email': email,
-            'usuario': usuario_form,
-            'imagen': imagen,
-            'rol_id': rol_id
+            'nombres': form.nombres.data,
+            'apellidos': form.apellidos.data,
+            'carnet': form.carnet.data,
+            'nacimiento': form.nacimiento.data,
+            'telefono': form.telefono.data,
+            'email': form.email.data,
+            'usuario': form.usuario.data,
+            'imagen': form.imagen.data,
+            'rol_id': form.rol_id.data
         }
         
-        if password:  # Solo actualizar contraseña si se proporciona
-            update_data['password'] = password
+        if form.password.data:
+            update_data['password'] = generate_password_hash(form.password.data)
             
         usuario.update(**update_data)
         return redirect(url_for('usuario.index'))
     
-    return usuario_view.edit(usuario, roles)
+    return usuario_view.edit(usuario, roles, form=form)
 
 @usuario_bp.route('/delete/<int:id>')
+@permission_required('eliminar_usuarios')  # Permiso específico para eliminación
 def delete(id):
     usuario = Usuario.get_by_id(id)
     if usuario:

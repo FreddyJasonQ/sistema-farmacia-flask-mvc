@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Egresos de Caja{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header-unified bg-danger">
+    <h2 class="mb-0 text-white">Egresos de Caja</h2>
+  </div>
+  
+  <div class="card-body">
+    <div class="row">
+      <!-- Formulario de Egreso -->
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header-unified bg-light">
+            <h4 class="mb-0">Registrar Nuevo Egreso</h4>
+          </div>
+          <div class="card-body">
+            <form method="POST" action="{{ url_for('movimiento.egresos') }}" class="form-unified">
+              <div class="form-section mb-3">
+                <h5>Información del Egreso</h5>
+                <div class="mb-3">
+                  <label class="form-label">Caja</label>
+                  <select class="form-select" name="caja_id" required>
+                    <option value="" disabled selected>Seleccione una caja</option>
+                    {% for caja in cajas %}
+                    <option value="{{ caja.id }}">{{ caja.descripcion }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Descripción</label>
+                  <input type="text" class="form-control" name="descripcion" required>
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Monto</label>
+                  <input type="number" step="0.01" min="0.01" class="form-control" name="monto" required>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-outline-danger">
+                  <i class="bi bi-check-circle me-1"></i> Registrar Egreso
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Lista de Egresos -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header-unified bg-light">
+            <h4 class="mb-0">Historial de Egresos</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table-unified">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Caja</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for egreso in egresos %}
+                  <tr>
+                    <td>{{ egreso.fecha.strftime('%d/%m/%Y') }}</td>
+                    <td>{{ egreso.descripcion }}</td>
+                    <td>{{ "{:,.2f}".format(egreso.monto) }}</td>
+                    <td>{{ egreso.caja.descripcion }}</td>
+                  </tr>
+                  {% else %}
+                  <tr>
+                    <td colspan="4" class="text-center">No hay egresos registrados</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card shadow">
-  <div class="card-header bg-primary text-white">
-    <h2 class="mb-0">Editar Producto: {{ producto.nombre_comercial }}</h2>
+<div class="card">
+  <div class="card-header-unified">
+    <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Editar Producto: {{ producto.nombre_comercial }}</h5>
   </div>
   
   <div class="card-body">
-    <form method="POST" action="{{ url_for('producto.edit', id=producto.id) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ url_for('producto.edit', id=producto.id) }}" enctype="multipart/form-data" class="form-unified">
       <div class="row mb-3">
         <div class="col-md-6">
           <label class="form-label">Nombre Comercial*</label>
@@ -69,7 +69,7 @@
                  value="{{ producto.barcode or '' }}">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Imagen</label>
+          <label class="form-label">Imagen (URL)</label>
           <input type="text" class="form-control" name="imagen" 
                  value="{{ producto.imagen or '' }}" placeholder="URL de la imagen">
         </div>
@@ -77,12 +77,12 @@
       
       <div class="row mb-3">
         <div class="col-md-4">
-          <label class="form-label">Precio de Compra</label>
+          <label class="form-label">Precio de Compra (S/)</label>
           <input type="number" class="form-control" name="precio_compra" 
                  value="{{ producto.precio_compra or 0 }}" step="0.01" min="0">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Precio de Venta</label>
+          <label class="form-label">Precio de Venta (S/)</label>
           <input type="number" class="form-control" name="precio_venta" 
                  value="{{ producto.precio_venta or 0 }}" step="0.01" min="0">
         </div>
@@ -98,14 +98,14 @@
         <textarea class="form-control" name="descripcion" rows="3">{{ producto.descripcion or '' }}</textarea>
       </div>
       
-      <div class="mb-3 form-check">
+      <div class="mb-3 form-check form-switch">
         <input type="checkbox" class="form-check-input" name="estado" id="estado"
                {% if producto.estado %}checked{% endif %}>
         <label class="form-check-label" for="estado">Activo</label>
       </div>
       
       <div class="d-flex justify-content-end">
-        <a href="{{ url_for('producto.index') }}" class="btn btn-secondary me-2">
+        <a href="{{ url_for('producto.index') }}" class="btn btn-outline-primary me-2">
           <i class="bi bi-x-circle me-1"></i> Cancelar
         </a>
         <button type="submit" class="btn btn-primary">

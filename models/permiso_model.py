@@ -63,7 +63,44 @@ class Permiso(db.Model):
             ("ver_productos", "Ver listado de productos"),
             ("crear_productos", "Crear nuevos productos"),
             ("editar_productos", "Editar productos existentes"),
-            ("eliminar_productos", "Eliminar productos")
+            ("eliminar_productos", "Eliminar productos"),
+            
+            ("ver_presentaciones", "Ver listado de presentaciones"),
+            ("crear_presentaciones", "Crear nuevas presentaciones"),
+            ("editar_presentaciones", "Editar presentaciones existentes"),
+            ("eliminar_presentaciones", "Eliminar presentaciones"),
+            
+            ("registrar_ingresos", "Registrar ingresos de caja"),
+            ("registrar_egresos", "Registrar egresos de caja"),
+            ("ver_ingresos", "Ver historial de ingresos"),
+            ("ver_egresos", "Ver historial de egresos"),
+            
+            ("ver_laboratorios", "Ver listado de laboratorios"),
+            ("crear_laboratorios", "Crear nuevos laboratorios"),
+            ("editar_laboratorios", "Editar laboratorios existentes"),
+            ("eliminar_laboratorios", "Eliminar laboratorios"),
+            
+            ("ver_compras", "Ver historial de compras"),
+            ("crear_compras", "Registrar nuevas compras"),
+            ("anular_compras", "Anular compras registradas"),
+            
+            ("ver_cajas", "Ver listado de cajas y detalles"),
+            ("crear_cajas", "Abrir nuevas cajas"),
+            ("cerrar_cajas", "Cerrar cajas abiertas"),
+            ("registrar_ingresos", "Registrar ingresos de caja"),
+            ("registrar_egresos", "Registrar egresos de caja"),
+            
+            ("ver_clientes", "Ver listado de clientes"),
+            ("crear_clientes", "Crear nuevos clientes"),
+            ("editar_clientes", "Editar clientes existentes"),
+            ("eliminar_clientes", "Eliminar clientes"),
+            
+            ("ver_categorias", "Ver listado de categorías"),
+            ("crear_categorias", "Crear nuevas categorías"),
+            ("editar_categorias", "Editar categorías existentes"),
+            ("eliminar_categorias", "Eliminar categorías"),
+            
+            ("ver_reportes_ventas", "ver reportes de ventas")
         ]
         
         for name, description in system_permissions:

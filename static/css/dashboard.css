@@ -1,22 +1,4 @@
-:root {
-    --primary: #4e73df;
-    --secondary: #858796;
-    --success: #1cc88a;
-    --info: #36b9cc;
-    --warning: #f6c23e;
-    --danger: #e74a3b;
-    --light: #f8f9fc;
-    --dark: #5a5c69;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
-    min-height: 100vh;
-    padding-top: 20px;
-    color: #333;
-}
-
+/* TARJETAS DEL DASHBOARD */
 .dashboard-card {
     border-radius: 15px;
     border: none;
@@ -33,19 +15,7 @@ body {
     box-shadow: 0 12px 25px rgba(0,0,0,0.15);
 }
 
-.card-header {
-    background: linear-gradient(120deg, #4e73df, #6f8be9);
-    color: white;
-    font-weight: 600;
-    padding: 15px 20px;
-    border-radius: 15px 15px 0 0 !important;
-    border: none;
-}
-
-.card-body {
-    padding: 25px;
-}
-
+/* ESTADÍSTICAS */
 .stat-card {
     padding: 20px;
     border-radius: 15px;
@@ -98,6 +68,7 @@ body {
     opacity: 0.9;
 }
 
+/* GRÁFICOS */
 .sales-chart {
     height: 300px;
     background: white;
@@ -152,6 +123,7 @@ body {
     text-align: center;
 }
 
+/* LISTADO DE PRODUCTOS */
 .product-item {
     display: flex;
     align-items: center;
@@ -174,55 +146,21 @@ body {
     border-radius: 20px;
 }
 
-.navbar-brand {
-    font-weight: 800;
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-    color: var(--primary);
-}
-
-.sidebar {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    height: 100%;
-}
-
-.sidebar-item {
-    padding: 12px 15px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    color: var(--dark);
-    text-decoration: none;
-    display: block;
-    transition: all 0.3s ease;
-    font-weight: 500;
-}
-
-.sidebar-item:hover {
-    background: linear-gradient(to right, #4e73df, #6f8be9);
+/* ELEMENTOS DE TARJETAS */
+.card-header {
+    background: linear-gradient(120deg, #4e73df, #6f8be9);
     color: white;
-    transform: translateX(5px);
+    font-weight: 600;
+    padding: 15px 20px;
+    border-radius: 15px 15px 0 0 !important;
+    border: none;
 }
 
-.sidebar-item i {
-    margin-right: 10px;
-    font-size: 1.2rem;
-    width: 25px;
-    text-align: center;
+.card-body {
+    padding: 25px;
 }
 
-footer {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    margin-top: 30px;
-    text-align: center;
-    font-weight: 500;
-    box-shadow: 0 -3px 15px rgba(0,0,0,0.05);
-}
-
+/* TÍTULOS DE SECCIÓN */
 .section-title {
     position: relative;
     padding-bottom: 15px;
@@ -242,6 +180,7 @@ footer {
     border-radius: 2px;
 }
 
+/* ANIMACIONES */
 .animated-icon {
     animation: pulse 2s infinite;
 }

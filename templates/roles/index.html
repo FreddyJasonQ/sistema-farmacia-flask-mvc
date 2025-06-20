@@ -2,8 +2,9 @@
 {% block title %}Administración Roles{% endblock %}
 
 {% block content %}
+
 <div class="card shadow-sm mb-4">
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <div class="card-header card-header-unified d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Roles</h5>
         <a href="{{ url_for('rol.create') }}" class="btn btn-light btn-sm">
             <i class="bi bi-plus-circle me-1"></i> Crear nuevo rol
@@ -11,7 +12,7 @@
     </div>
     <div class="card-body">
         <!-- Barra de búsqueda -->
-        <form method="get" action="{{ url_for('rol.index') }}" class="mb-4">
+        <form method="get" action="{{ url_for('rol.index') }}" class="mb-4 form-unified">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Buscar roles..." 
                        name="search" value="{{ search_query }}">
@@ -22,14 +23,14 @@
         </form>
         
         <div class="table-responsive">
-            <table class="table table-bordered align-middle text-center">
-                <thead class="table-light">
+            <table class="table table-unified align-middle">
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Rol</th>
                         <th>Guard</th>
                         <th>Permisos</th>
-                        <th>Acciones</th>
+                        <th class="actions-cell">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,18 +39,18 @@
                         <td>{{ rol.id }}</td>
                         <td class="fw-bold">{{ rol.name }}</td>
                         <td>{{ rol.guard_name }}</td>
-                        <td class="text-start">
+                        <td>
                             {% if "Administrador" in rol.permisos|map(attribute='name') %}
-                                <span class="badge bg-danger">Todos los permisos</span>
+                                <span class="badge badge-table bg-danger">Todos los permisos</span>
                             {% else %}
                                 {% for permiso in rol.permisos %}
-                                <span class="badge bg-primary mb-1">{{ permiso.name }}</span>
+                                <span class="badge badge-table bg-primary">{{ permiso.name }}</span>
                                 {% else %}
                                 <span class="text-muted">Sin permisos asignados</span>
                                 {% endfor %}
                             {% endif %}
                         </td>
-                        <td>
+                        <td class="actions-cell">
                             <a href="{{ url_for('rol.edit', id=rol.id) }}" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil-square"></i>
                             </a>

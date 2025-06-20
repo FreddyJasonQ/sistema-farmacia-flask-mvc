@@ -1,30 +1,31 @@
 {% extends 'base.html' %}
-
 {% block title %}Clientes{% endblock %}
 
 {% block content %}
-<div class="card shadow">
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <h2 class="mb-0">Lista de Clientes</h2>
-    <a class="btn btn-primary" href="{{ url_for('cliente.create') }}">
+<div class="card">
+  <div class="card-header-unified d-flex justify-content-between align-items-center">
+    <h2 class="mb-0"><i class="bi bi-people me-2"></i>Lista de Clientes</h2>
+    <a class="btn btn-light" href="{{ url_for('cliente.create') }}">
       <i class="bi bi-plus-circle me-1"></i> Nuevo Cliente
     </a>
   </div>
   
   <div class="card-body">
-    <form method="get" action="{{ url_for('cliente.index') }}" class="mb-4">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Buscar..." 
-               name="search" value="{{ search_query }}">
-        <button class="btn btn-outline-primary" type="submit">
-          <i class="bi bi-search"></i>
-        </button>
-      </div>
-    </form>
+    <div class="content-card mb-4">
+      <form method="get" action="{{ url_for('cliente.index') }}" class="form-unified">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Buscar clientes..." 
+                 name="search" value="{{ search_query }}">
+          <button class="btn btn-outline-primary" type="submit">
+            <i class="bi bi-search me-1"></i> Buscar
+          </button>
+        </div>
+      </form>
+    </div>
     
     <div class="table-responsive">
-      <table class="table table-striped table-hover">
-        <thead class="table-light">
+      <table class="table table-unified">
+        <thead>
           <tr>
             <th>Nombre</th>
             <th>Tipo Documento</th>
@@ -32,29 +33,29 @@
             <th>Complemento</th>
             <th>Teléfono</th>
             <th>Estado</th>
-            <th>Acciones</th>
+            <th class="actions-cell">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {% for cliente in clientes %}
-          <tr>
-            <td>{{ cliente.nombre }}</td>
+          <tr class="medical-transition">
+            <td class="fw-bold">{{ cliente.nombre }}</td>
             <td>{{ cliente.tipo_documento }}</td>
             <td>{{ cliente.documento }}</td>
             <td>{{ cliente.complemento or '-' }}</td>
             <td>{{ cliente.telefono }}</td>
             <td>
               {% if cliente.estado %}
-                <span class="badge bg-success">Activo</span>
+                <span class="badge badge-success">Activo</span>
               {% else %}
-                <span class="badge bg-danger">Inactivo</span>
+                <span class="badge badge-danger">Inactivo</span>
               {% endif %}
             </td>
-            <td>
-              <a href="{{ url_for('cliente.edit', id=cliente.id) }}" class="btn btn-sm btn-warning">
+            <td class="actions-cell">
+              <a href="{{ url_for('cliente.edit', id=cliente.id) }}" class="btn btn-sm btn-outline-warning">
                 <i class="bi bi-pencil"></i>
               </a>
-              <a href="{{ url_for('cliente.delete', id=cliente.id) }}" class="btn btn-sm btn-danger" 
+              <a href="{{ url_for('cliente.delete', id=cliente.id) }}" class="btn btn-sm btn-outline-danger" 
                  onclick="return confirm('¿Eliminar cliente?')">
                 <i class="bi bi-trash"></i>
               </a>
