@@ -56,8 +56,8 @@
             <td>{{ producto.categoria.categoria if producto.categoria else '-' }}</td>
             <td>{{ producto.laboratorio.nombre_lab if producto.laboratorio else '-' }}</td>
             <td>{{ producto.presentacion.presentacion if producto.presentacion else '-' }}</td>
-            <td>S/ {{ producto.precio_compra }}</td>
-            <td>S/ {{ producto.precio_venta }}</td>
+            <td>BS/ {{ producto.precio_compra }}</td>
+            <td>BS/ {{ producto.precio_venta }}</td>
             <td>{{ producto.cantidad }}</td>
             <td>
               {% if producto.estado %}
