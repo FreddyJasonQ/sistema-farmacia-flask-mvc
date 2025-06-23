@@ -6,7 +6,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
-            flash('Debe iniciar sesión para acceder a esta página', 'warning')
+            flash('Debe iniciar sesión para acceder al sistema', 'warning')
             return redirect(url_for('auth.login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -24,7 +24,7 @@ def permission_required(*permission_names, require_all=False):
         def decorated_function(*args, **kwargs):
             # Verificación de autenticación
             if not current_user.is_authenticated:
-                flash('Debe iniciar sesión para acceder a esta página', 'warning')
+                flash('Debe iniciar sesión para acceder al sistema', 'warning')
                 return redirect(url_for('auth.login'))
             
             # Acceso directo para administradores
