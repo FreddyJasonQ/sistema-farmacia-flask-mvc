@@ -47,7 +47,7 @@ def create():
     return render_template('cajas/create.html', form=form)
 
 @caja_bp.route('/<int:id>/close', methods=['GET', 'POST'])
-@permission_required('cerrar_cajas')  # Permiso específico para cerrar cajas
+@permission_required('cerrar_cajas')
 def close(id):
     caja = Caja.get_by_id(id)
     
@@ -55,19 +55,18 @@ def close(id):
         flash('Caja no encontrada', 'danger')
         return redirect(url_for('caja.index'))
     
-    if caja.estado == 'cerrada':
+    # VERIFICACIÓN CORREGIDA: Usar fecha_cierre en lugar de estado
+    if caja.fecha_cierre:  # Si hay fecha de cierre, la caja ya está cerrada
         flash('Esta caja ya está cerrada', 'warning')
         return redirect(url_for('caja.index'))
     
     if request.method == 'POST':
         monto_cierre = float(request.form['monto_cierre'])
         
-        # Validar monto de cierre
         if monto_cierre < 0:
             flash('El monto de cierre no puede ser negativo', 'danger')
             return render_template('cajas/close.html', caja=caja, total_teorico=caja.calcular_total())
         
-        # Registrar movimiento de cierre
         movimiento_cierre = MovimientoCaja(
             caja_id=caja.id,
             tipo='egreso',
@@ -77,8 +76,8 @@ def close(id):
         )
         movimiento_cierre.save()
         
-        # Cerrar la caja
-        caja.cerrar(monto_cierre, current_user.id)
+        # CORRECCIÓN: Pasar solo el argumento necesario
+        caja.cerrar(monto_cierre)  # Solo monto_cierre
         
         flash('Caja cerrada exitosamente', 'success')
         return redirect(url_for('caja.index'))
